@@ -1,5 +1,9 @@
 # Trading Platform (Laravel Backend)
 
+## 📌 Frontend Github Link
+https://github.com/BipinJoshi2052/virgosoft-trading-frontend
+
+
 ## 📌 Project Overview
 
 This project is a **mini trading platform backend** built using **Laravel**.  
