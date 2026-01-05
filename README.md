@@ -125,8 +125,8 @@ These views allow:
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone <repository-url>
-cd trading
+git clone https://github.com/BipinJoshi2052/virgosoft-trading-backend
+cd virgosoft-trading-backend
 ```
 
 ### 2️⃣ Install Dependencies
