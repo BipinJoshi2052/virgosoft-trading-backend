@@ -9,6 +9,8 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Order;
+
 
 class OrderMatched
 {
@@ -50,7 +52,6 @@ class OrderMatched
 
     public function broadcastWith()
     {
-        // Customize payload per user if needed, but for simplicity, send full data (frontend can filter)
         return [
             'buyOrder' => $this->buyOrder->toArray(),
             'sellOrder' => $this->sellOrder->toArray(),

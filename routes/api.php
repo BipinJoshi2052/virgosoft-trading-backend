@@ -19,9 +19,9 @@ use App\Http\Controllers\Api\MatchOrdersApiController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 // Route::middleware('auth:sanctum')->get('/profile', [ProfileController::class, 'show']);
 
@@ -39,6 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::get('/match-orders', [MatchOrdersApiController::class, 'index'])->name('orders.match');
     Route::post('/match-orders/{buyOrder}/{sellOrder}', [MatchOrdersApiController::class, 'execute'])->name('match.execute');
-    
+
     Broadcast::routes();
 });

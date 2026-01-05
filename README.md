@@ -1,64 +1,215 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Trading Platform (Laravel Backend)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📌 Project Overview
 
-## About Laravel
+This project is a **mini trading platform backend** built using **Laravel**.  
+It simulates a **crypto-style limit order trading system** with:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- USD wallet balance
+- Asset balances (BTC / ETH)
+- Buy & Sell limit orders
+- Order matching engine
+- Trade execution with commission
+- Admin-controlled order matching
+- API support for SPA (Vue.js frontend)
+- Blade views for direct browser access
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The project was designed with **financial data integrity, atomic transactions, and scalability** in mind.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🏗 System Architecture
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Backend
+- **Laravel (latest stable)**
+- **MySQL / PostgreSQL**
+- **Sanctum authentication**
+- **Service-based business logic**
+- **Repository-style separation**
+- **Atomic DB transactions**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Backend Views (Blade)
+Accessible at:
 
-## Laravel Sponsors
+```
+http://localhost:8000
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+These views allow:
+- User login
+- Wallet and order inspection
+- Order placement & cancellation
+- Admin order matching
+- Manual trade execution
 
-### Premium Partners
+### Frontend (SPA – Separate Project)
+- Vue 3 + Vite + Tailwind
+- Communicates via REST APIs
+- Uses the same backend services & logic
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+---
 
-## Contributing
+## 🔑 Core Features
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Wallet & Assets
+- USD balance per user
+- Asset balances per symbol (BTC, ETH)
+- Locked asset tracking for sell orders
 
-## Code of Conduct
+### Orders
+- Limit Buy & Sell orders
+- Order statuses:
+  - `1` → Open
+  - `2` → Filled
+  - `3` → Cancelled
+- Order cancellation with locked fund release
+- Order filtering
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Matching Engine
+- Full match only (no partial matching)
+- Matching rules:
+  - Buy price ≥ Sell price
+  - Same symbol
+- Trade price = **Seller (maker) price**
+- Atomic execution using DB transactions
 
-## Security Vulnerabilities
+### Commission
+- Configurable via `.env`
+- Default: **1.5%**
+- Deducted consistently during trade execution
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+### Real-time Updates
+- Used pusher for real time updates
+- notifications are sent to private channels of users
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📂 Database Structure
+
+| Table | Description |
+|-----|------------|
+| users | Users with USD balance |
+| assets | User assets & locked amounts |
+| orders | Buy/Sell limit orders |
+| trades | Executed trade records |
+
+---
+
+## 🔐 Authentication
+
+- Laravel Sanctum
+- Session-based authentication
+- Used by:
+  - Blade views
+  - API consumers (Vue SPA)
+
+---
+
+## 🌐 API Endpoints
+
+| Method | Endpoint | Description |
+|------|--------|-------------|
+| POST | /api/login | Login user |
+| POST | /api/logout | Logout user |
+| GET | /api/profile | Wallet & assets |
+| GET | /api/orders | List orders |
+| POST | /api/orders | Create order |
+| POST | /api/orders/{id}/cancel | Cancel order |
+| GET | /api/match-orders | List matching orders |
+| POST | /api/match-orders/{buy}/{sell} | Execute trade |
+
+---
+
+## ⚙ Installation & Setup
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone <repository-url>
+cd trading
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+composer install
+```
+
+### 3️⃣ Environment Setup
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Update `.env`:
+
+```env
+DB_DATABASE=your_db
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
+
+TRADING_COMMISSION=0.015
+```
+
+### 4️⃣ Run Migrations & Seeders
+
+```bash
+php artisan migrate --seed
+```
+
+Seeders will:
+- Create two default users
+- Create BTC & ETH assets for each user
+- Assign initial balances
+
+### 5️⃣ Start Server
+
+```bash
+php artisan serve
+```
+
+Visit:
+
+```
+http://localhost:8000
+```
+
+---
+
+## 👥 Default Seeded Users
+
+| Email | Password |
+|-----|---------|
+| alice@example.com | password |
+| bob@example.com | password |
+
+---
+
+## 🧠 Design Decisions
+
+- Business logic isolated in Services
+- Controllers kept thin
+- Database transactions for safety
+- Locked balances prevent double-spending
+- Same logic reused by Blade & API
+
+---
+
+## 🚀 Possible Enhancements
+
+- Partial order matching
+- Trade history per user
+- Order book depth aggregation
+
+---
+
+## 📌 Notes for Reviewers
+
+- Backend works independently using Blade views
+- APIs are SPA-ready
+- Vue frontend is intentionally separated
+- Focus areas:
+  - Data integrity
+  - Clean architecture
+  - Financial correctness

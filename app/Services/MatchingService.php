@@ -124,12 +124,11 @@ class MatchingService
             $buyer = $buyOrder->user->refresh();
             $seller = $sellOrder->user->refresh();
 
-            // Prepare updated data payload
             $updatedData = [
                 'buyer' => [
                     'balance' => $buyer->balance,
-                    'assets' => $buyer->assets()->get(),  // Or specific to symbol
-                    'orders' => $buyer->orders()->latest()->limit(10)->get(),  // Limit to avoid large payloads
+                    'assets' => $buyer->assets()->get(),
+                    'orders' => $buyer->orders()->latest()->limit(10)->get(),
                 ],
                 'seller' => [
                     'balance' => $seller->balance,
